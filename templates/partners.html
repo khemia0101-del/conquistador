@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Partner With Us — Conquistador Oil, Heating & Air Conditioning{% endblock %}
+
+{% block content %}
+<section class="bg-navy-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">Partner With Us</h1>
+        <p class="text-xl text-gray-300">Get qualified, pre-screened leads &mdash; no cold calling, no marketing spend</p>
+    </div>
+</section>
+
+<!-- Value Prop -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="text-center">
+                <div class="bg-flame-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">1</div>
+                <h3 class="font-semibold mb-2">Apply</h3>
+                <p class="text-gray-600 text-sm">Fill out our partner application with your company details and service areas.</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-flame-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">2</div>
+                <h3 class="font-semibold mb-2">Get Vetted</h3>
+                <p class="text-gray-600 text-sm">We verify your license, insurance, and track record.</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-flame-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">3</div>
+                <h3 class="font-semibold mb-2">Receive Leads</h3>
+                <p class="text-gray-600 text-sm">Start getting qualified leads via Telegram or email. Accept or decline with one tap.</p>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-4">Requirements</h2>
+        <ul class="list-disc list-inside text-gray-600 space-y-2 mb-8">
+            <li>Valid PA contractor license (HVAC) or fuel dealer permit (oil delivery)</li>
+            <li>General liability insurance ($1M minimum) and workers' compensation</li>
+            <li>Minimum 2 years in business</li>
+            <li>Minimum 3.5 star average on Google, Yelp, or Angi</li>
+            <li>No unresolved BBB complaints</li>
+            <li>Agree to service standards and response time commitments</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Application Form -->
+<section class="py-16">
+    <div class="max-w-2xl mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-8 text-center">Apply Now</h2>
+        <form x-data="partnerForm()" @submit.prevent="submit()" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Company Name *</label>
+                    <input x-model="form.company_name" type="text" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contact Name *</label>
+                    <input x-model="form.contact_name" type="text" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                    <input x-model="form.phone" type="tel" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                    <input x-model="form.email" type="email" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Business Address</label>
+                <input x-model="form.address" type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">PA License Number</label>
+                <input x-model="form.license_number" type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Services Offered *</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <template x-for="svc in serviceOptions" :key="svc.value">
+                        <label class="flex items-center space-x-2 text-sm">
+                            <input type="checkbox" :value="svc.value" x-model="form.service_types" class="rounded border-gray-300 text-flame-500 focus:ring-flame-500">
+                            <span x-text="svc.label"></span>
+                        </label>
+                    </template>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Zip Codes Served * (comma-separated)</label>
+                <input x-model="zipInput" type="text" placeholder="17601, 17602, 17603" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Create Password *</label>
+                <input x-model="form.password" type="password" required minlength="8" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-flame-500 focus:outline-none">
+                <p class="text-xs text-gray-500 mt-1">For accessing your contractor dashboard</p>
+            </div>
+
+            <button type="submit" class="w-full bg-flame-500 hover:bg-flame-600 text-white py-3 rounded-lg font-semibold transition" :disabled="submitting">
+                <span x-show="!submitting">Submit Application</span>
+                <span x-show="submitting">Submitting...</span>
+            </button>
+            <p x-show="success" class="text-green-600 text-sm text-center" x-text="success"></p>
+            <p x-show="error" class="text-red-600 text-sm text-center" x-text="error"></p>
+        </form>
+    </div>
+</section>
+
+<script>
+function partnerForm() {
+    return {
+        form: { company_name: '', contact_name: '', phone: '', email: '', address: '', license_number: '', service_types: [], password: '' },
+        zipInput: '',
+        submitting: false, success: '', error: '',
+        serviceOptions: [
+            { value: 'heating_oil', label: 'Heating Oil Delivery' },
+            { value: 'hvac_repair', label: 'HVAC Repair' },
+            { value: 'hvac_install', label: 'HVAC Installation' },
+            { value: 'furnace_maintenance', label: 'Furnace Maintenance' },
+            { value: 'ac_service', label: 'AC Service' },
+            { value: 'emergency', label: 'Emergency Service' },
+        ],
+        async submit() {
+            this.submitting = true; this.success = ''; this.error = '';
+            const zips = this.zipInput.split(',').map(z => z.trim()).filter(Boolean);
+            if (!zips.length) { this.error = 'Please enter at least one zip code.'; this.submitting = false; return; }
+            if (!this.form.service_types.length) { this.error = 'Please select at least one service.'; this.submitting = false; return; }
+            try {
+                const res = await fetch('/api/partners/apply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...this.form, service_zips: zips })
+                });
+                const data = await res.json();
+                if (res.ok) { this.success = data.message; } else { this.error = data.detail || 'Something went wrong.'; }
+            } catch (e) { this.error = 'Network error. Please try again.'; }
+            this.submitting = false;
+        }
+    }
+}
+</script>
+{% endblock %}

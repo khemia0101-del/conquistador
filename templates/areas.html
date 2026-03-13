@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Service Areas — Conquistador Oil, Heating & Air Conditioning{% endblock %}
+
+{% block content %}
+<section class="bg-navy-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">Service Areas</h1>
+        <p class="text-xl text-gray-300">Serving 5 counties across Central Pennsylvania</p>
+    </div>
+</section>
+
+<section class="py-16">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for slug, area in areas.items() %}
+            <a href="/areas/{{ slug }}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition">
+                <h2 class="text-xl font-bold mb-2">{{ area.city }}, {{ area.state }}</h2>
+                <p class="text-gray-600 text-sm mb-3">{{ area.description }}</p>
+                <p class="text-xs text-gray-400">ZIP codes: {{ area.zips[:5] | join(', ') }}{% if area.zips | length > 5 %}, ...{% endif %}</p>
+                <span class="inline-block mt-3 text-flame-500 font-semibold text-sm">View details &rarr;</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

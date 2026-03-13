@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ area.city }} {{ area.state }} Heating Oil & HVAC — Conquistador{% endblock %}
+{% block description %}Heating oil delivery and HVAC services in {{ area.city }}, {{ area.state }}. 24/7 emergency service. Licensed and insured contractors.{% endblock %}
+
+{% block content %}
+<section class="bg-navy-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">Heating Oil & HVAC Services in {{ area.city }}, {{ area.state }}</h1>
+        <p class="text-xl text-gray-300">{{ area.description }}</p>
+    </div>
+</section>
+
+<section class="py-16">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="prose max-w-none">
+            <h2>Heating Oil Delivery in {{ area.city }}</h2>
+            <p>Conquistador connects {{ area.city }} homeowners with reliable heating oil suppliers. Whether you need a scheduled delivery or emergency fuel, we match you with a vetted local provider who can deliver quickly and at competitive prices.</p>
+
+            <h2>HVAC Services in {{ area.city }}</h2>
+            <p>From furnace repair to complete system installation, our network of licensed HVAC contractors serves the {{ area.city }} area 24/7. All contractors are insured, background-checked, and committed to quality service standards.</p>
+
+            <h2>Zip Codes We Serve</h2>
+            <div class="flex flex-wrap gap-2 not-prose">
+                {% for zip in area.zips %}
+                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">{{ zip }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="mt-8 not-prose">
+                <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Get Help in {{ area.city }}</button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

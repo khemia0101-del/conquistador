@@ -1,0 +1,29 @@
+/* Conquistador Oil — Custom styles (supplements Tailwind CDN) */
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prose styling for content pages */
+.prose h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.prose p {
+    margin-bottom: 1rem;
+    color: #4b5563;
+    line-height: 1.75;
+}
+
+.prose ul {
+    margin-bottom: 1rem;
+}
+
+.prose li {
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
