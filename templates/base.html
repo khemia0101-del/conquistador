@@ -166,6 +166,17 @@
         </div>
     </div>
     <script src="/static/js/chatbot.js"></script>
+    <script>
+        function openChatbot() {
+            const el = document.querySelector('[x-data="chatbot()"]');
+            if (el && el._x_dataStack) {
+                el._x_dataStack[0].isOpen = true;
+                if (el._x_dataStack[0].messages.length === 0) {
+                    el._x_dataStack[0].connect();
+                }
+            }
+        }
+    </script>
     {% endblock %}
 </body>
 </html>
