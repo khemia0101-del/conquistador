@@ -19,6 +19,8 @@ class Lead(Base):
     urgency = Column(String(20), nullable=False)  # emergency, urgent, routine
     property_type = Column(String(30))  # residential, commercial, multi
     description = Column(Text)
+    diagnosis = Column(Text)  # AI assessment of the issue
+    preferred_time = Column(String(20))  # asap, tomorrow, few_days, flexible
     lead_score = Column(Integer)  # 1-100
     status = Column(String(20), default="new")  # new, assigned, accepted, completed, cancelled
     source = Column(String(30), default="chatbot")  # chatbot, form, phone
