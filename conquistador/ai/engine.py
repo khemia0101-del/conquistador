@@ -1,4 +1,4 @@
-"""Model-agnostic AI engine supporting Ollama, OpenRouter, and Anthropic."""
+"""Model-agnostic AI engine supporting Ollama, OpenRouter, Anthropic, and NVIDIA."""
 
 import os
 import logging
@@ -25,6 +25,9 @@ class AIEngine:
         elif self.provider == "anthropic":
             self.base_url = "https://api.anthropic.com"
             self.api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+        elif self.provider == "nvidia":
+            self.base_url = "https://integrate.api.nvidia.com/v1"
+            self.api_key = os.environ.get("NVIDIA_API_KEY", "")
         else:
             self.base_url = settings.ai_base_url
             self.api_key = settings.ai_api_key

@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     secret_key: str = "change-me"
 
     # AI Engine
-    ai_provider: str = "ollama"  # ollama, openrouter, anthropic
+    ai_provider: str = "ollama"  # ollama, openrouter, anthropic, nvidia
     ai_model: str = "llama3.1:8b"
     ai_base_url: str = "http://localhost:11434/v1"
     ai_api_key: str = "ollama"
