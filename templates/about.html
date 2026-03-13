@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}About Us — Conquistador Oil, Heating & Air Conditioning{% endblock %}
+
+{% block content %}
+<section class="bg-navy-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">About Conquistador</h1>
+        <p class="text-xl text-gray-300">Serving Central Pennsylvania since 2004</p>
+    </div>
+</section>
+
+<section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 prose max-w-none">
+        <h2>Our Story</h2>
+        <p>Conquistador Oil, Heating & Air Conditioning Inc. has been serving the Lancaster County community since 2004. Based at 931 N Shippen Street in Lancaster, PA, we've built our reputation on connecting homeowners and businesses with reliable, qualified contractors for all their heating oil and HVAC needs.</p>
+
+        <h2>Our Mission</h2>
+        <p>We believe every home deserves reliable heating and cooling. Our mission is to make it easy for Central PA residents to find trustworthy, licensed contractors who deliver quality service at fair prices.</p>
+
+        <h2>How We Vet Our Contractors</h2>
+        <p>Every contractor in our network goes through a rigorous vetting process:</p>
+        <ul>
+            <li>Valid PA contractor license (HVAC) or fuel dealer permit (oil delivery)</li>
+            <li>General liability insurance ($1M minimum) and workers' compensation</li>
+            <li>Minimum 2 years in business</li>
+            <li>Minimum 3.5 star average on review platforms</li>
+            <li>No unresolved BBB complaints</li>
+            <li>Commitment to our service standards and response times</li>
+        </ul>
+
+        <h2>Quality Guarantee</h2>
+        <p>After every service, we follow up with customers to ensure satisfaction. Contractors are rated on timeliness, professionalism, and problem resolution. Those who consistently deliver excellent service receive priority lead routing, while those who fall short are counseled or removed from our network.</p>
+
+        <div class="mt-8 not-prose flex flex-col sm:flex-row gap-4">
+            <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Get Help Now</button>
+            <a href="/partners" class="border border-flame-500 text-flame-500 hover:bg-flame-50 px-6 py-3 rounded-lg font-semibold transition text-center">Become a Partner</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

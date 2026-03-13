@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Conquistador Oil, Heating & Air Conditioning{% endblock %}</title>
+    <meta name="description" content="{% block description %}24/7 heating oil delivery and HVAC services in Central Pennsylvania. Lancaster, York, Harrisburg, Lebanon, Reading.{% endblock %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        flame: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12' },
+                        navy: { 800: '#1e293b', 900: '#0f172a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-white text-gray-900 font-sans">
+    <!-- Emergency Banner -->
+    <div class="bg-red-600 text-white text-center py-2 px-4 text-sm font-semibold">
+        No Heat? We respond immediately &mdash; day or night.
+        <a href="tel:7173979800" class="underline ml-2">Call (717) 397-9800</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-navy-900 text-white" x-data="{ open: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-flame-500">CONQUISTADOR</a>
+                    <span class="hidden sm:inline ml-2 text-sm text-gray-300">Oil, Heating & AC</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="hover:text-flame-400 transition">Home</a>
+                    <a href="/services" class="hover:text-flame-400 transition">Services</a>
+                    <a href="/areas" class="hover:text-flame-400 transition">Service Areas</a>
+                    <a href="/about" class="hover:text-flame-400 transition">About</a>
+                    <a href="/contact" class="hover:text-flame-400 transition">Contact</a>
+                    <a href="/partners" class="hover:text-flame-400 transition">Partner With Us</a>
+                    <a href="tel:7173979800" class="bg-flame-500 hover:bg-flame-600 px-4 py-2 rounded-lg font-semibold transition">(717) 397-9800</a>
+                </div>
+                <button @click="open = !open" class="md:hidden text-gray-300 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div x-show="open" x-cloak class="md:hidden bg-navy-800 px-4 pb-4 space-y-2">
+            <a href="/" class="block py-2 hover:text-flame-400">Home</a>
+            <a href="/services" class="block py-2 hover:text-flame-400">Services</a>
+            <a href="/areas" class="block py-2 hover:text-flame-400">Service Areas</a>
+            <a href="/about" class="block py-2 hover:text-flame-400">About</a>
+            <a href="/contact" class="block py-2 hover:text-flame-400">Contact</a>
+            <a href="/partners" class="block py-2 hover:text-flame-400">Partner With Us</a>
+            <a href="tel:7173979800" class="block bg-flame-500 text-center py-2 rounded-lg font-semibold">(717) 397-9800</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 text-gray-300 py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-flame-500 font-bold text-lg mb-4">CONQUISTADOR</h3>
+                    <p class="text-sm">Oil, Heating & Air Conditioning Inc.</p>
+                    <p class="text-sm mt-2">931 N Shippen St<br>Lancaster, PA 17602</p>
+                    <p class="text-sm mt-2"><a href="tel:7173979800" class="hover:text-flame-400">(717) 397-9800</a></p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/services" class="hover:text-flame-400">Heating Oil Delivery</a></li>
+                        <li><a href="/services" class="hover:text-flame-400">HVAC Repair</a></li>
+                        <li><a href="/services" class="hover:text-flame-400">HVAC Installation</a></li>
+                        <li><a href="/services" class="hover:text-flame-400">Maintenance Plans</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Service Areas</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/areas/lancaster" class="hover:text-flame-400">Lancaster County</a></li>
+                        <li><a href="/areas/york" class="hover:text-flame-400">York County</a></li>
+                        <li><a href="/areas/harrisburg" class="hover:text-flame-400">Harrisburg Area</a></li>
+                        <li><a href="/areas/lebanon" class="hover:text-flame-400">Lebanon County</a></li>
+                        <li><a href="/areas/reading" class="hover:text-flame-400">Reading / Berks County</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2004&ndash;2026 Conquistador Oil, Heating & Air Conditioning Inc. All rights reserved.</p>
+                <p class="mt-2">Est. 2004 &bull; Lancaster, PA &bull; <a href="/partners" class="hover:text-flame-400">Partner With Us</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    {% block chatbot %}
+    <div x-data="chatbot()" x-cloak>
+        <!-- Chat Button -->
+        <button @click="toggle()" class="fixed bottom-6 right-6 bg-flame-500 hover:bg-flame-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition z-50" :class="{ 'hidden': isOpen }">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+        </button>
+
+        <!-- Chat Panel -->
+        <div x-show="isOpen" class="fixed bottom-6 right-6 w-96 max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-gray-200" x-transition>
+            <!-- Header -->
+            <div class="bg-navy-900 text-white px-4 py-3 rounded-t-2xl flex items-center justify-between">
+                <div>
+                    <p class="font-bold text-flame-500">Conquistador</p>
+                    <p class="text-xs text-green-400">Online &mdash; Responds instantly</p>
+                </div>
+                <button @click="toggle()" class="text-gray-300 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3" x-ref="messages">
+                <template x-for="(msg, i) in messages" :key="i">
+                    <div :class="msg.role === 'user' ? 'text-right' : 'text-left'">
+                        <div :class="msg.role === 'user' ? 'bg-flame-500 text-white' : 'bg-gray-100 text-gray-800'" class="inline-block px-4 py-2 rounded-2xl max-w-[80%] text-sm" x-text="msg.content"></div>
+                    </div>
+                </template>
+                <div x-show="typing" class="text-left">
+                    <div class="inline-block bg-gray-100 text-gray-500 px-4 py-2 rounded-2xl text-sm">Typing...</div>
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="border-t p-3">
+                <form @submit.prevent="send()" class="flex gap-2">
+                    <input x-model="input" type="text" placeholder="Type your message..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-flame-500" :disabled="typing">
+                    <button type="submit" class="bg-flame-500 hover:bg-flame-600 text-white rounded-full w-10 h-10 flex items-center justify-center transition" :disabled="typing || !input.trim()">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/chatbot.js"></script>
+    {% endblock %}
+</body>
+</html>

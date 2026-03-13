@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Services — Conquistador Oil, Heating & Air Conditioning{% endblock %}
+{% block description %}Heating oil delivery, HVAC repair, installation, and maintenance services in Central Pennsylvania.{% endblock %}
+
+{% block content %}
+<section class="bg-navy-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">Our Services</h1>
+        <p class="text-xl text-gray-300">Professional heating oil and HVAC services for Central Pennsylvania</p>
+    </div>
+</section>
+
+<section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 space-y-16">
+        <!-- Heating Oil -->
+        <div id="heating-oil">
+            <h2 class="text-3xl font-bold mb-4">Heating Oil Delivery</h2>
+            <p class="text-gray-600 mb-4">Reliable heating oil delivery to homes and businesses throughout Central PA. We work with trusted local suppliers to ensure competitive pricing and dependable service.</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>Automatic and will-call delivery options</li>
+                <li>Same-day emergency delivery available</li>
+                <li>Competitive per-gallon pricing</li>
+                <li>Minimum delivery: 100 gallons</li>
+            </ul>
+            <p class="text-sm text-gray-500 mb-4">Typical response: Same-day for emergencies, next-day for scheduled delivery.</p>
+            <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Request Oil Delivery</button>
+
+            <div class="mt-8" x-data="{ open: null }">
+                <h3 class="font-semibold mb-3">Common Questions</h3>
+                <div class="border rounded-lg divide-y">
+                    <div>
+                        <button @click="open = open === 1 ? null : 1" class="w-full text-left px-4 py-3 font-medium flex justify-between items-center">
+                            How quickly can I get a delivery?
+                            <svg class="w-5 h-5 transition" :class="open === 1 && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div x-show="open === 1" x-collapse class="px-4 pb-3 text-gray-600 text-sm">For emergencies (tank empty, no heat), we arrange same-day delivery. Scheduled deliveries are typically next business day.</div>
+                    </div>
+                    <div>
+                        <button @click="open = open === 2 ? null : 2" class="w-full text-left px-4 py-3 font-medium flex justify-between items-center">
+                            What is the minimum delivery?
+                            <svg class="w-5 h-5 transition" :class="open === 2 && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div x-show="open === 2" x-collapse class="px-4 pb-3 text-gray-600 text-sm">Most of our delivery partners have a 100-gallon minimum. Contact us to confirm for your area.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HVAC Repair -->
+        <div id="hvac-repair">
+            <h2 class="text-3xl font-bold mb-4">HVAC Repair</h2>
+            <p class="text-gray-600 mb-4">Expert diagnosis and repair for all makes and models of furnaces, heat pumps, boilers, and air conditioning systems.</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>24/7 emergency repair service</li>
+                <li>All major brands serviced</li>
+                <li>Upfront pricing &mdash; no surprises</li>
+                <li>Licensed and insured technicians</li>
+            </ul>
+            <p class="text-sm text-gray-500 mb-4">Typical response: Within 2 hours for emergencies, same-day for urgent repairs.</p>
+            <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Schedule a Repair</button>
+        </div>
+
+        <!-- HVAC Installation -->
+        <div id="hvac-install">
+            <h2 class="text-3xl font-bold mb-4">HVAC Installation</h2>
+            <p class="text-gray-600 mb-4">Professional installation of new heating and cooling systems. We match you with the right contractor for your specific needs and budget.</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>Free in-home estimates</li>
+                <li>All major brands available</li>
+                <li>Proper sizing and load calculations</li>
+                <li>Permits and inspections handled</li>
+            </ul>
+            <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Get a Free Estimate</button>
+        </div>
+
+        <!-- Maintenance -->
+        <div id="maintenance">
+            <h2 class="text-3xl font-bold mb-4">Maintenance Plans</h2>
+            <p class="text-gray-600 mb-4">Preventive maintenance keeps your systems running efficiently, extends equipment life, and prevents costly breakdowns.</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>Annual tune-ups for heating and cooling</li>
+                <li>Filter replacements and system cleaning</li>
+                <li>Safety inspections and carbon monoxide testing</li>
+                <li>Priority scheduling for plan members</li>
+            </ul>
+            <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Learn About Maintenance Plans</button>
+        </div>
+
+        <!-- Emergency -->
+        <div id="emergency" class="bg-red-50 border border-red-200 rounded-xl p-8">
+            <h2 class="text-3xl font-bold mb-4 text-red-700">Emergency Service</h2>
+            <p class="text-gray-700 mb-4">No heat? Gas smell? System failure? We respond to emergencies 24 hours a day, 7 days a week.</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="tel:7173979800" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold text-center transition">Call Now: (717) 397-9800</a>
+                <button onclick="document.querySelector('[x-data]').__x.$data.isOpen = true" class="bg-flame-500 hover:bg-flame-600 text-white px-6 py-3 rounded-lg font-semibold transition">Chat With Us</button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
