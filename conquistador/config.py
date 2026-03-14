@@ -32,6 +32,17 @@ class Settings(BaseSettings):
     business_address: str = "931 N Shippen St, Lancaster, PA 17602"
     business_name: str = "Conquistador Oil, Heating & Air Conditioning Inc."
 
+    # CORS — allowed origins for embeddable widget
+    cors_origins: list[str] = [
+        "https://conquistadoroil.com",
+        "https://www.conquistadoroil.com",
+        "http://localhost:8000",
+    ]
+
+    # Webhooks — notify external site of events
+    webhook_url: str = ""  # e.g. https://conquistadoroil.com/api/webhook
+    webhook_secret: str = ""  # HMAC signing key for webhook payloads
+
     # JWT
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 1440  # 24 hours
