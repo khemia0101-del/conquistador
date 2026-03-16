@@ -51,11 +51,18 @@ class AIEngine:
     async def _chat_openai(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
         """Chat via OpenAI-compatible API (Ollama, OpenRouter, NVIDIA)."""
         full_messages = [{"role": "system", "content": system_prompt}] + messages
-        response = await self.client.chat.completions.create(
-            model=self.model,
-            messages=full_messages,
-            max_tokens=max_tokens,
-        )
+        kwargs: dict = {
+            "model": self.model,
+            "messages": full_messages,
+            "max_tokens": max_tokens,
+        }
+
+        # Kimi K2.5 on NVIDIA: use instant mode (no reasoning traces) + recommended temp
+        if "kimi" in self.model:
+            kwargs["temperature"] = 0.6
+            kwargs["extra_body"] = {"chat_template_kwargs": {"thinking": False}}
+
+        response = await self.client.chat.completions.create(**kwargs)
         return response.choices[0].message.content
 
     async def _chat_anthropic(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
