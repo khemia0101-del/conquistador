@@ -32,7 +32,7 @@ EMAIL_FROM="Conquistador Oil <leads@conquistadoroil.com>"
 
 # Telegram
 TELEGRAM_BOT_TOKEN="8777210697:AAGxMps-wlhP3StSr481vE_m4dUlQU5av_"
-ADMIN_TELEGRAM_CHAT_ID="CHANGEME"               # Get from @userinfobot
+ADMIN_TELEGRAM_CHAT_ID="7009194853"              # Get from @userinfobot
 
 # =====================================================================
 # >>>  END OF USER CONFIG — everything below is automatic  <<<
