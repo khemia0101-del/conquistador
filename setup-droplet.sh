@@ -79,6 +79,15 @@ fi
 # 4. PostgreSQL
 # -------------------------------------------------------------------
 echo "[4/10] Setting up PostgreSQL..."
+
+# Configure PostgreSQL to use md5 password authentication for local connections
+PG_HBA=$(sudo -u postgres psql -tc "SHOW hba_file;" | xargs)
+if grep -q "local.*all.*all.*peer" "$PG_HBA"; then
+  sed -i 's/^local\s\+all\s\+all\s\+peer/local   all             all                                     md5/' "$PG_HBA"
+  systemctl restart postgresql
+  echo "  → Switched PostgreSQL local auth from peer to md5"
+fi
+
 sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname='conquistador'" | grep -q 1 || \
   sudo -u postgres psql -c "CREATE USER conquistador WITH PASSWORD '${DB_PASSWORD}';"
 sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='conquistador'" | grep -q 1 || \
