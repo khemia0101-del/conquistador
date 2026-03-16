@@ -1,0 +1,7 @@
+[project]
+name = "conquistador"
+version = "0.1.0"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.backends._legacy:_Backend"

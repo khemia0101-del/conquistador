@@ -9,6 +9,7 @@ ssh conquistador@$DROPLET_IP << 'EOF'
   git pull origin main
   source venv/bin/activate
   pip install -r requirements.txt
+  pip install -e .
   alembic upgrade head
   sudo systemctl restart conquistador-web
   sudo systemctl restart conquistador-celery
