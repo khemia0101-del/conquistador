@@ -18,7 +18,9 @@ class Settings(BaseSettings):
     ai_base_url: str = "https://integrate.api.nvidia.com/v1"
     ai_api_key: str = ""
 
-    # Email
+    # Email (SMTP)
+    email_host: str = "smtp.zoho.com"
+    email_port: int = 465
     email_user: str = ""
     email_pass: str = ""
     email_from: str = "Conquistador Oil <leads@conquistadoroil.com>"
