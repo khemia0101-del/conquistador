@@ -14,20 +14,20 @@ set -euo pipefail
 # =====================================================================
 # >>>  FILL THESE IN BEFORE RUNNING  <<<
 # =====================================================================
-DB_PASSWORD="CHANGEME"                          # PostgreSQL password
+DB_PASSWORD="010120Queen@"                       # PostgreSQL password
 SECRET_KEY="$(openssl rand -hex 32)"            # Auto-generated JWT secret
 DOMAIN="conquistadoroil.com"                    # Your domain (or droplet IP)
 
 # AI
 AI_PROVIDER="nvidia"
 AI_MODEL="moonshotai/kimi-k2.5"
-NVIDIA_API_KEY="CHANGEME"                       # Get from build.nvidia.com
+NVIDIA_API_KEY="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"  # Get from build.nvidia.com
 
 # Email (Zoho Mail)
 EMAIL_HOST="smtp.zoho.com"
 EMAIL_PORT="465"
-EMAIL_USER="CHANGEME"                           # e.g. leads@conquistadoroil.com
-EMAIL_PASS="CHANGEME"                           # Zoho app password
+EMAIL_USER="info@conquistadoroil.com"            # e.g. leads@conquistadoroil.com
+EMAIL_PASS="010120Meyer@"                        # Zoho app password
 EMAIL_FROM="Conquistador Oil <leads@conquistadoroil.com>"
 
 # Telegram
