@@ -1,4 +1,4 @@
-"""Gmail SMTP email sender."""
+"""SMTP email sender (Zoho, Gmail, or any SMTP provider)."""
 
 import smtplib
 import logging
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 async def send_email(to: str, subject: str, body: str, html: bool = True) -> bool:
-    """Send an email via Gmail SMTP. Returns True on success."""
+    """Send an email via SMTP. Returns True on success."""
     settings = get_settings()
     if not settings.email_user or not settings.email_pass:
         logger.warning("Email not configured, skipping send to %s", to)
@@ -25,7 +25,7 @@ async def send_email(to: str, subject: str, body: str, html: bool = True) -> boo
     msg.attach(MIMEText(body, content_type))
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        with smtplib.SMTP_SSL(settings.email_host, settings.email_port) as server:
             server.login(settings.email_user, settings.email_pass)
             server.send_message(msg)
         logger.info("Email sent to %s: %s", to, subject)

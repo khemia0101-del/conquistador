@@ -156,3 +156,52 @@ async def admin_quality(
         }
         for c in contractors
     ]
+
+
+# ─── Orchestrator Controls ──────────────────────────────────────────────────
+
+
+@router.get("/system-status")
+async def system_status(
+    auth: dict = Depends(get_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Real-time system health: leads, contractors, assignments."""
+    from conquistador.agents.orchestrator import Orchestrator
+    orch = Orchestrator(db)
+    return await orch.get_system_status()
+
+
+@router.post("/agents/run-all")
+async def run_all_agents(
+    auth: dict = Depends(get_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Manually trigger all agent tasks."""
+    from conquistador.agents.orchestrator import Orchestrator
+    orch = Orchestrator(db)
+    run_log = await orch.run_all()
+    return {"status": "completed", "log": run_log}
+
+
+@router.post("/agents/run/{pipeline}")
+async def run_agent_pipeline(
+    pipeline: str,
+    auth: dict = Depends(get_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Manually trigger a specific pipeline: minutely, hourly, or daily."""
+    from conquistador.agents.orchestrator import Orchestrator
+    orch = Orchestrator(db)
+
+    runners = {
+        "minutely": orch.run_minutely,
+        "hourly": orch.run_hourly,
+        "daily": orch.run_daily,
+    }
+    runner = runners.get(pipeline)
+    if not runner:
+        raise HTTPException(status_code=400, detail=f"Unknown pipeline: {pipeline}")
+
+    await runner()
+    return {"status": "completed", "pipeline": pipeline, "log": orch._run_log}

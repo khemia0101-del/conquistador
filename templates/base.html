@@ -5,20 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Conquistador Oil, Heating & Air Conditioning{% endblock %}</title>
     <meta name="description" content="{% block description %}24/7 heating oil delivery and HVAC services in Central Pennsylvania. Lancaster, York, Harrisburg, Lebanon, Reading.{% endblock %}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        flame: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12' },
-                        navy: { 800: '#1e293b', 900: '#0f172a' }
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/static/css/tailwind.css">
+    <script defer src="/static/js/alpine.min.js"></script>
     <style>
         [x-cloak] { display: none !important; }
     </style>
@@ -138,11 +126,17 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-3" x-ref="messages">
                 <template x-for="(msg, i) in messages" :key="i">
                     <div :class="msg.role === 'user' ? 'text-right' : 'text-left'">
-                        <div :class="msg.role === 'user' ? 'bg-flame-500 text-white' : 'bg-gray-100 text-gray-800'" class="inline-block px-4 py-2 rounded-2xl max-w-[80%] text-sm" x-text="msg.content"></div>
+                        <div :class="msg.role === 'user' ? 'bg-flame-500 text-white' : 'bg-gray-100 text-gray-800'" class="inline-block px-4 py-2 rounded-2xl max-w-[80%] text-sm whitespace-pre-line" x-text="msg.content"></div>
                     </div>
                 </template>
                 <div x-show="typing" class="text-left">
                     <div class="inline-block bg-gray-100 text-gray-500 px-4 py-2 rounded-2xl text-sm">Typing...</div>
+                </div>
+                <!-- Quick Reply Buttons -->
+                <div x-show="quickReplies.length > 0" class="flex flex-wrap gap-2 pt-2">
+                    <template x-for="(reply, i) in quickReplies" :key="'qr'+i">
+                        <button @click="selectReply(reply)" class="bg-white border border-flame-500 text-flame-600 px-3 py-1.5 rounded-full text-xs font-medium hover:bg-flame-50 transition" x-text="reply.label"></button>
+                    </template>
                 </div>
             </div>
 
@@ -160,6 +154,17 @@
         </div>
     </div>
     <script src="/static/js/chatbot.js"></script>
+    <script>
+        function openChatbot() {
+            const el = document.querySelector('[x-data="chatbot()"]');
+            if (el && el._x_dataStack) {
+                el._x_dataStack[0].isOpen = true;
+                if (el._x_dataStack[0].messages.length === 0) {
+                    el._x_dataStack[0].connect();
+                }
+            }
+        }
+    </script>
     {% endblock %}
 </body>
 </html>

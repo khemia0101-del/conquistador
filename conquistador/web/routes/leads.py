@@ -58,6 +58,17 @@ async def submit_lead(lead_data: LeadCreate, db: AsyncSession = Depends(get_db))
     # Route to contractors
     await route_lead(lead, db)
 
+    # Notify Manus site via webhook
+    from conquistador.web.routes.webhooks import fire_webhook
+    await fire_webhook("lead.created", {
+        "id": lead.id,
+        "service_type": lead.service_type,
+        "zip_code": lead.zip_code,
+        "urgency": lead.urgency,
+        "lead_score": lead.lead_score,
+        "status": lead.status,
+    })
+
     return {"id": lead.id, "status": "submitted", "message": "We'll be in touch shortly!"}
 
 

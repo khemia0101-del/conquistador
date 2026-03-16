@@ -13,12 +13,14 @@ class Settings(BaseSettings):
     secret_key: str = "change-me"
 
     # AI Engine
-    ai_provider: str = "ollama"  # ollama, openrouter, anthropic, nvidia
-    ai_model: str = "llama3.1:8b"
-    ai_base_url: str = "http://localhost:11434/v1"
-    ai_api_key: str = "ollama"
+    ai_provider: str = "nvidia"  # nvidia, ollama, openrouter, anthropic
+    ai_model: str = "moonshotai/kimi-k2.5"
+    ai_base_url: str = "https://integrate.api.nvidia.com/v1"
+    ai_api_key: str = ""
 
-    # Email
+    # Email (SMTP)
+    email_host: str = "smtp.zoho.com"
+    email_port: int = 465
     email_user: str = ""
     email_pass: str = ""
     email_from: str = "Conquistador Oil <leads@conquistadoroil.com>"
@@ -31,6 +33,17 @@ class Settings(BaseSettings):
     business_phone: str = "717-397-9800"
     business_address: str = "931 N Shippen St, Lancaster, PA 17602"
     business_name: str = "Conquistador Oil, Heating & Air Conditioning Inc."
+
+    # CORS — allowed origins for embeddable widget
+    cors_origins: list[str] = [
+        "https://conquistadoroil.com",
+        "https://www.conquistadoroil.com",
+        "http://localhost:8000",
+    ]
+
+    # Webhooks — notify external site of events
+    webhook_url: str = ""  # e.g. https://conquistadoroil.com/api/webhook
+    webhook_secret: str = ""  # HMAC signing key for webhook payloads
 
     # JWT
     jwt_algorithm: str = "HS256"
