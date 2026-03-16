@@ -97,7 +97,8 @@ sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='conquistador
 # 5. Clone repo & set up Python env
 # -------------------------------------------------------------------
 echo "[5/10] Cloning repository..."
-if [ ! -d "$APP_DIR" ]; then
+git config --global --add safe.directory "$APP_DIR"
+if [ ! -d "$APP_DIR/.git" ]; then
   git clone "$REPO_URL" "$APP_DIR"
 else
   cd "$APP_DIR" && git pull origin main
