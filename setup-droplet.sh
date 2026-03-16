@@ -14,7 +14,7 @@ set -euo pipefail
 # =====================================================================
 # >>>  FILL THESE IN BEFORE RUNNING  <<<
 # =====================================================================
-DB_PASSWORD="010120Queen@"                       # PostgreSQL password
+DB_PASSWORD="010120QueenConquistador"             # PostgreSQL password
 SECRET_KEY="$(openssl rand -hex 32)"            # Auto-generated JWT secret
 DOMAIN="conquistadoroil.com"                    # Your domain (or droplet IP)
 
