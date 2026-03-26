@@ -10,8 +10,8 @@ from conquistador.web.auth import hash_password, verify_password
 class TestConfig:
     def test_default_settings(self):
         settings = Settings()
-        assert settings.ai_provider == "ollama"
-        assert settings.ai_model == "llama3.1:8b"
+        assert settings.ai_provider == "nvidia"
+        assert settings.ai_model == "moonshotai/kimi-k2.5"
         assert settings.business_phone == "717-397-9800"
 
     def test_service_zips_populated(self):

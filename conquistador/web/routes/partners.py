@@ -9,9 +9,10 @@ from conquistador.models.base import get_db
 from conquistador.models.contractor import Contractor
 from conquistador.web.auth import hash_password
 from conquistador.comms.telegram_bot import send_admin_alert
+from conquistador.config import BASE_DIR
 
 router = APIRouter(tags=["partners"])
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 class PartnerApplication(BaseModel):

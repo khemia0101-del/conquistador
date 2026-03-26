@@ -9,14 +9,24 @@ class Base(DeclarativeBase):
     pass
 
 
+_engine = None
+_session_factory = None
+
+
 def get_engine():
-    settings = get_settings()
-    return create_async_engine(settings.database_url, echo=False)
+    global _engine
+    if _engine is None:
+        settings = get_settings()
+        _engine = create_async_engine(settings.database_url, echo=False)
+    return _engine
 
 
 def get_session_factory():
-    engine = get_engine()
-    return async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    global _session_factory
+    if _session_factory is None:
+        engine = get_engine()
+        _session_factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    return _session_factory
 
 
 async def get_db():
@@ -24,9 +34,6 @@ async def get_db():
     async with session_factory() as session:
         try:
             yield session
-            await session.commit()
         except Exception:
             await session.rollback()
             raise
-        finally:
-            await session.close()

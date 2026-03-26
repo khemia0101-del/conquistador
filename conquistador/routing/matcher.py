@@ -36,8 +36,8 @@ async def find_matching_contractors(lead: Lead, db: AsyncSession) -> list[Contra
     stmt = select(Contractor).where(
         and_(
             Contractor.is_active.is_(True),
-            Contractor.service_types.any(lead.service_type),
-            Contractor.service_zips.any(lead.zip_code),
+            Contractor.service_types.contains([lead.service_type]),
+            Contractor.service_zips.contains([lead.zip_code]),
             Contractor.current_daily_leads < Contractor.max_daily_leads,
         )
     )

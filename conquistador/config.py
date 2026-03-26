@@ -1,8 +1,11 @@
 """Central configuration for Conquistador application."""
 
 import os
+from pathlib import Path
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
@@ -28,6 +31,9 @@ class Settings(BaseSettings):
     # Telegram
     telegram_bot_token: str = ""
     admin_telegram_chat_id: str = ""
+
+    # Base URL for links in notifications
+    base_url: str = "https://conquistadoroil.com"
 
     # Business
     business_phone: str = "717-397-9800"

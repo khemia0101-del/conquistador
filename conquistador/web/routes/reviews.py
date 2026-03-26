@@ -10,9 +10,10 @@ from conquistador.models.base import get_db
 from conquistador.models.lead import Lead
 from conquistador.models.assignment import LeadAssignment
 from conquistador.agents.customer_svc import process_survey_submission
+from conquistador.config import BASE_DIR
 
 router = APIRouter(tags=["reviews"])
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 class SurveySubmission(BaseModel):

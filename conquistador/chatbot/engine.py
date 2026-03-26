@@ -8,6 +8,7 @@ from conquistador.ai.engine import get_ai_engine
 from conquistador.chatbot.prompts import SYSTEM_PROMPT
 from conquistador.chatbot.extractor import lead_complete, extract_lead_data
 from conquistador.models.lead import Lead
+from conquistador.agents.intake_agent import calculate_lead_score
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,7 @@ async def chat_handler(websocket: WebSocket, db: AsyncSession):
             if lead_complete(conversation):
                 lead_data = await extract_lead_data(conversation)
                 if lead_data:
+                    score = calculate_lead_score(lead_data)
                     lead = Lead(
                         name=lead_data.get("name"),
                         phone=lead_data.get("phone", "unknown"),
@@ -44,6 +46,7 @@ async def chat_handler(websocket: WebSocket, db: AsyncSession):
                         urgency=lead_data.get("urgency", "routine"),
                         description=lead_data.get("description"),
                         conversation_log=conversation,
+                        lead_score=score,
                         source="chatbot",
                         status="new",
                     )

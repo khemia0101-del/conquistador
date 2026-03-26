@@ -59,14 +59,19 @@ def run_async(coro):
         loop.close()
 
 
+_sync_engine = None
+_SyncSession = None
+
+
 def get_sync_session():
     """Get a database session for Celery tasks."""
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import sessionmaker
-    from conquistador.models.base import Base
-    engine = create_engine(settings.database_url_sync)
-    Session = sessionmaker(bind=engine)
-    return Session()
+    global _sync_engine, _SyncSession
+    if _sync_engine is None:
+        from sqlalchemy import create_engine
+        from sqlalchemy.orm import sessionmaker
+        _sync_engine = create_engine(settings.database_url_sync)
+        _SyncSession = sessionmaker(bind=_sync_engine)
+    return _SyncSession()
 
 
 def get_async_session():

@@ -7,6 +7,12 @@ from conquistador.models.base import Base
 from conquistador.models import *  # noqa: Import all models so Alembic sees them
 
 config = context.config
+
+# Use database URL from app config instead of hardcoded alembic.ini value
+from conquistador.config import get_settings
+_settings = get_settings()
+config.set_main_option("sqlalchemy.url", _settings.database_url_sync)
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 

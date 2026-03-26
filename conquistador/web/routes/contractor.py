@@ -16,9 +16,10 @@ from conquistador.web.auth import (
     create_access_token, hash_password,
 )
 from conquistador.agents.contractor_mgmt import handle_lead_acceptance, handle_lead_decline
+from conquistador.config import BASE_DIR
 
 router = APIRouter(tags=["contractor"])
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 # ─── Registration ────────────────────────────────────────────────────────────

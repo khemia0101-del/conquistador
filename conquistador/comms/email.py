@@ -1,5 +1,6 @@
 """SMTP email sender (Zoho, Gmail, or any SMTP provider)."""
 
+import asyncio
 import smtplib
 import logging
 from email.mime.text import MIMEText
@@ -7,6 +8,13 @@ from email.mime.multipart import MIMEMultipart
 from conquistador.config import get_settings
 
 logger = logging.getLogger(__name__)
+
+
+def _send_smtp(host: str, port: int, user: str, password: str, msg: MIMEMultipart):
+    """Blocking SMTP send — run via asyncio.to_thread()."""
+    with smtplib.SMTP_SSL(host, port) as server:
+        server.login(user, password)
+        server.send_message(msg)
 
 
 async def send_email(to: str, subject: str, body: str, html: bool = True) -> bool:
@@ -25,9 +33,10 @@ async def send_email(to: str, subject: str, body: str, html: bool = True) -> boo
     msg.attach(MIMEText(body, content_type))
 
     try:
-        with smtplib.SMTP_SSL(settings.email_host, settings.email_port) as server:
-            server.login(settings.email_user, settings.email_pass)
-            server.send_message(msg)
+        await asyncio.to_thread(
+            _send_smtp, settings.email_host, settings.email_port,
+            settings.email_user, settings.email_pass, msg,
+        )
         logger.info("Email sent to %s: %s", to, subject)
         return True
     except Exception as e:

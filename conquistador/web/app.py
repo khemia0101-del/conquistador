@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession
 from conquistador.models.base import get_db
 from conquistador.chatbot.engine import chat_handler
-from conquistador.config import get_settings
+from conquistador.config import get_settings, BASE_DIR
 from conquistador.web.routes import public, leads, contractor, partners, admin, reviews, webhooks
 
 settings = get_settings()
@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 # Include route modules
 app.include_router(public.router)
