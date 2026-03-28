@@ -1,6 +1,5 @@
 """Model-agnostic AI engine supporting Ollama, OpenRouter, Anthropic (Claude), and NVIDIA."""
 
-import os
 import logging
 import httpx
 from openai import AsyncOpenAI
@@ -19,7 +18,7 @@ class AIEngine:
 
         if self.provider == "anthropic":
             # Claude uses its own API format, not OpenAI-compatible
-            self.api_key = os.environ.get("ANTHROPIC_API_KEY", settings.ai_api_key)
+            self.api_key = settings.anthropic_api_key or settings.ai_api_key
             self.client = None  # Use httpx directly for Anthropic
         else:
             if self.provider == "ollama":
@@ -27,13 +26,14 @@ class AIEngine:
                 self.api_key = "ollama"
             elif self.provider == "openrouter":
                 self.base_url = "https://openrouter.ai/api/v1"
-                self.api_key = os.environ.get("OPENROUTER_API_KEY", "")
+                self.api_key = settings.openrouter_api_key or settings.ai_api_key
             elif self.provider == "nvidia":
                 self.base_url = "https://integrate.api.nvidia.com/v1"
-                self.api_key = os.environ.get("NVIDIA_API_KEY", "")
+                self.api_key = settings.nvidia_api_key or settings.ai_api_key
             else:
                 self.base_url = settings.ai_base_url
                 self.api_key = settings.ai_api_key
+            logger.info("AI engine: provider=%s, model=%s, key=%s...", self.provider, self.model, self.api_key[:12] if self.api_key else "EMPTY")
 
             self.client = AsyncOpenAI(base_url=self.base_url, api_key=self.api_key)
 
