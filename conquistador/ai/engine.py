@@ -57,13 +57,17 @@ class AIEngine:
             "max_tokens": max_tokens,
         }
 
-        # Kimi K2.5 on NVIDIA: use instant mode (no reasoning traces) + recommended temp
+        # Kimi K2.5 on NVIDIA: recommended temp
         if "kimi" in self.model:
             kwargs["temperature"] = 0.6
-            kwargs["extra_body"] = {"chat_template_kwargs": {"thinking": False}}
 
         response = await self.client.chat.completions.create(**kwargs)
-        return response.choices[0].message.content
+        content = response.choices[0].message.content
+        # Some models (e.g. Kimi K2.5) may return None for content when using
+        # reasoning/thinking mode — fall back to reasoning_content if available
+        if content is None:
+            content = getattr(response.choices[0].message, 'reasoning_content', None)
+        return content or "I'm sorry, I'm having trouble right now. Please call us at 717-397-9800 for immediate help."
 
     async def _chat_anthropic(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
         """Chat via Anthropic's native Messages API (Claude)."""
