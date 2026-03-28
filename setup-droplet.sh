@@ -20,7 +20,7 @@ DOMAIN="conquistadoroil.com"                    # Your domain (or droplet IP)
 
 # AI
 AI_PROVIDER="nvidia"
-AI_MODEL="moonshotai/kimi-k2.5"
+AI_MODEL="meta/llama-3.1-70b-instruct"
 NVIDIA_API_KEY="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"  # Get from build.nvidia.com
 
 # Email (Zoho Mail)

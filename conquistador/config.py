@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     # AI Engine
     ai_provider: str = "nvidia"  # nvidia, ollama, openrouter, anthropic
-    ai_model: str = "moonshotai/kimi-k2.5"
+    ai_model: str = "meta/llama-3.1-70b-instruct"
     ai_base_url: str = "https://integrate.api.nvidia.com/v1"
     ai_api_key: str = ""
     nvidia_api_key: str = ""
