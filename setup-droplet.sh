@@ -56,8 +56,13 @@ apt-get install -y -qq \
   postgresql postgresql-contrib \
   redis-server \
   nginx certbot python3-certbot-nginx \
-  nodejs npm \
   git curl ufw
+
+# Install nodejs/npm only if not already present
+if ! command -v node &>/dev/null; then
+  curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  apt-get install -y nodejs
+fi
 
 # -------------------------------------------------------------------
 # 2. Firewall
