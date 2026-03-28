@@ -194,7 +194,7 @@ User=conquistador
 Group=conquistador
 WorkingDirectory=/opt/conquistador
 Environment=PATH=/opt/conquistador/venv/bin:/usr/bin
-ExecStart=/opt/conquistador/venv/bin/uvicorn conquistador.web.app:app --host 127.0.0.1 --port 8000 --workers 2
+ExecStart=/opt/conquistador/venv/bin/uvicorn conquistador.web.app:app --host 127.0.0.1 --port 8000
 Restart=always
 RestartSec=5
 
