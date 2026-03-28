@@ -60,12 +60,14 @@ async def route_lead(lead: Lead, db: AsyncSession) -> bool:
         return False
 
     # Assign to top 3 contractors in cascade order
+    # 1st = primary, 2nd & 3rd = backups (quoted 15% higher than primary)
     for order, contractor in enumerate(contractors[:3], start=1):
         assignment = LeadAssignment(
             lead_id=lead.id,
             contractor_id=contractor.id,
             status="pending",
             cascade_order=order,
+            is_backup=(order > 1),
         )
         db.add(assignment)
         await db.commit()

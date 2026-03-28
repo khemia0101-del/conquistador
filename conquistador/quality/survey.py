@@ -16,12 +16,14 @@ def generate_survey_token() -> str:
 async def send_survey(lead, contractor) -> bool:
     """Send a post-service survey link to the customer."""
     token = generate_survey_token()
-    survey_url = f"https://conquistadoroil.com/review/{lead.id}?token={token}"
+    from conquistador.config import get_settings
+    settings = get_settings()
+    survey_url = f"{settings.base_url}/review/{lead.id}?token={token}"
 
     body = f"""
     <h2>How was your service?</h2>
     <p>Hi {lead.name or 'there'},</p>
-    <p>We'd love to hear about your recent service from <strong>{contractor.company_name}</strong>.</p>
+    <p>We'd love to hear about your recent service from Conquistador.</p>
     <p>Please take a moment to rate your experience:</p>
     <p><a href="{survey_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;">Rate Your Service</a></p>
     <p>Thank you for choosing Conquistador!</p>

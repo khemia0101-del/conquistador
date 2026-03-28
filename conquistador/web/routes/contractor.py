@@ -225,6 +225,69 @@ async def get_contractor_leads(
     ]
 
 
+class QuoteSubmission(BaseModel):
+    quote_amount: float
+
+
+@router.post("/api/contractor/leads/{lead_id}/quote")
+async def submit_quote(
+    lead_id: int,
+    data: QuoteSubmission,
+    auth: dict = Depends(get_current_contractor),
+    db: AsyncSession = Depends(get_db),
+):
+    """Contractor submits their quote. System adds 15-20% markup for the customer price."""
+    from decimal import Decimal
+
+    contractor_id = auth["contractor_id"]
+    stmt = select(LeadAssignment).where(
+        and_(
+            LeadAssignment.lead_id == lead_id,
+            LeadAssignment.contractor_id == contractor_id,
+        )
+    )
+    result = await db.execute(stmt)
+    assignment = result.scalar_one_or_none()
+
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+
+    quote = Decimal(str(data.quote_amount))
+    markup = Decimal("0.20")  # 20% default markup
+    customer_price = (quote * (1 + markup)).quantize(Decimal("0.01"))
+
+    assignment.contractor_quote = quote
+    assignment.markup_pct = markup * 100
+    assignment.customer_price = customer_price
+
+    # Also update backup assignments for this lead with 15% higher pricing
+    backup_stmt = select(LeadAssignment).where(
+        and_(
+            LeadAssignment.lead_id == lead_id,
+            LeadAssignment.contractor_id != contractor_id,
+            LeadAssignment.is_backup.is_(True),
+        )
+    )
+    backup_result = await db.execute(backup_stmt)
+    backups = list(backup_result.scalars().all())
+
+    backup_markup = Decimal("0.15")
+    for backup in backups:
+        # Backup quote is 15% higher than primary contractor's quote
+        backup_quote = (quote * (1 + backup_markup)).quantize(Decimal("0.01"))
+        backup_customer_price = (backup_quote * (1 + markup)).quantize(Decimal("0.01"))
+        backup.contractor_quote = backup_quote
+        backup.markup_pct = markup * 100
+        backup.customer_price = backup_customer_price
+
+    await db.commit()
+    return {
+        "status": "quote_submitted",
+        "contractor_quote": float(quote),
+        "customer_price": float(customer_price),
+    }
+
+
 @router.post("/api/contractor/leads/{lead_id}/accept")
 async def accept_lead(
     lead_id: int,

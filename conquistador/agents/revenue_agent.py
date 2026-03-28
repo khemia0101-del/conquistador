@@ -9,7 +9,6 @@ from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from conquistador.models.payment import Payment
 from conquistador.models.assignment import LeadAssignment
-from conquistador.models.contractor import Contractor
 from conquistador.billing.invoicing import create_invoice, send_invoice_email
 from conquistador.billing.tracker import get_revenue_summary
 from conquistador.comms.telegram_bot import send_admin_alert
@@ -34,17 +33,19 @@ async def generate_invoices_for_completed_leads(db: AsyncSession):
     assignments = list(result.scalars().all())
 
     for assignment in assignments:
-        contractor_stmt = select(Contractor).where(Contractor.id == assignment.contractor_id)
-        contractor_result = await db.execute(contractor_stmt)
-        contractor = contractor_result.scalar_one_or_none()
+        if not assignment.contractor_quote or not assignment.customer_price:
+            logger.warning("Assignment %d has no quote/price set, skipping invoice", assignment.id)
+            continue
 
-        if contractor and contractor.commission_rate:
-            # Create a flat fee invoice based on commission rate
-            # This is a placeholder — actual amounts would depend on job value
-            amount = Decimal("50.00")  # Default lead fee
-            payment = await create_invoice(assignment.id, contractor.id, amount, db)
-            await send_invoice_email(payment, db)
-            logger.info("Invoice created for assignment %d", assignment.id)
+        # Our revenue is the markup: customer_price - contractor_quote
+        markup_revenue = assignment.customer_price - assignment.contractor_quote
+        if markup_revenue <= 0:
+            continue
+
+        payment = await create_invoice(assignment.id, assignment.contractor_id, markup_revenue, db)
+        await send_invoice_email(payment, db)
+        logger.info("Invoice created for assignment %d: revenue=$%s (customer=$%s, contractor=$%s)",
+                     assignment.id, markup_revenue, assignment.customer_price, assignment.contractor_quote)
 
 
 async def send_daily_revenue_report(db: AsyncSession):
