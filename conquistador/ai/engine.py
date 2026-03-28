@@ -51,23 +51,43 @@ class AIEngine:
     async def _chat_openai(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
         """Chat via OpenAI-compatible API (Ollama, OpenRouter, NVIDIA)."""
         full_messages = [{"role": "system", "content": system_prompt}] + messages
+
+        # Kimi K2.5 on NVIDIA returns content in 'reasoning' field, not 'content'.
+        # Use httpx directly to access the raw JSON response.
+        if "kimi" in self.model:
+            return await self._chat_kimi(full_messages, max_tokens)
+
         kwargs: dict = {
             "model": self.model,
             "messages": full_messages,
             "max_tokens": max_tokens,
         }
 
-        # Kimi K2.5 on NVIDIA: recommended temp
-        if "kimi" in self.model:
-            kwargs["temperature"] = 0.6
-
         response = await self.client.chat.completions.create(**kwargs)
-        msg = response.choices[0].message
-        content = msg.content
-        # Kimi K2.5 puts output in 'reasoning' field instead of 'content'
-        if content is None:
-            content = getattr(msg, 'reasoning', None) or getattr(msg, 'reasoning_content', None)
-        return content or "I'm sorry, I'm having trouble right now. Please call us at 717-397-9800 for immediate help."
+        return response.choices[0].message.content
+
+    async def _chat_kimi(self, messages: list[dict], max_tokens: int) -> str:
+        """Chat via NVIDIA API for Kimi K2.5 — uses httpx to access 'reasoning' field."""
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{self.base_url}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": self.model,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "temperature": 0.6,
+                },
+                timeout=30,
+            )
+            response.raise_for_status()
+            data = response.json()
+            msg = data["choices"][0]["message"]
+            # Kimi puts text in 'reasoning', not 'content'
+            return msg.get("content") or msg.get("reasoning") or msg.get("reasoning_content") or ""
 
     async def _chat_anthropic(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
         """Chat via Anthropic's native Messages API (Claude)."""
