@@ -106,7 +106,9 @@ git config --global --add safe.directory "$APP_DIR"
 if [ ! -d "$APP_DIR/.git" ]; then
   git clone "$REPO_URL" "$APP_DIR"
 else
-  cd "$APP_DIR" && git pull origin main
+  cd "$APP_DIR"
+  git fetch origin claude/conquistador-oil-website-FWz9x
+  git reset --hard origin/claude/conquistador-oil-website-FWz9x
 fi
 chown -R "$APP_USER":"$APP_USER" "$APP_DIR"
 
