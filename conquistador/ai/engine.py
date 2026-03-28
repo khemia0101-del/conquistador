@@ -62,11 +62,11 @@ class AIEngine:
             kwargs["temperature"] = 0.6
 
         response = await self.client.chat.completions.create(**kwargs)
-        content = response.choices[0].message.content
-        # Some models (e.g. Kimi K2.5) may return None for content when using
-        # reasoning/thinking mode — fall back to reasoning_content if available
+        msg = response.choices[0].message
+        content = msg.content
+        # Kimi K2.5 puts output in 'reasoning' field instead of 'content'
         if content is None:
-            content = getattr(response.choices[0].message, 'reasoning_content', None)
+            content = getattr(msg, 'reasoning', None) or getattr(msg, 'reasoning_content', None)
         return content or "I'm sorry, I'm having trouble right now. Please call us at 717-397-9800 for immediate help."
 
     async def _chat_anthropic(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
