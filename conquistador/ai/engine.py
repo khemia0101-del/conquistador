@@ -45,8 +45,12 @@ class AIEngine:
             else:
                 return await self._chat_openai(messages, system_prompt, max_tokens)
         except Exception as e:
-            logger.error("AI engine error (%s): %s", self.provider, e)
-            return "I'm sorry, I'm having trouble right now. Please call us at 717-397-9800 for immediate help."
+            logger.error("AI engine error (%s): %s", self.provider, e, exc_info=True)
+            return (
+                "Hi there! Thanks for reaching out to Conquistador Oil, Heating & Air Conditioning. "
+                "I'd love to help you — please tell me what service you need (heating oil delivery, "
+                "HVAC repair, AC service, or installation) and your zip code, and we'll get you taken care of!"
+            )
 
     async def _chat_openai(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
         """Chat via OpenAI-compatible API (Ollama, OpenRouter, NVIDIA)."""
@@ -85,9 +89,13 @@ class AIEngine:
             )
             response.raise_for_status()
             data = response.json()
+            logger.info("Kimi raw response keys: %s", list(data.get("choices", [{}])[0].get("message", {}).keys()))
             msg = data["choices"][0]["message"]
             # Kimi puts text in 'reasoning', not 'content'
-            return msg.get("content") or msg.get("reasoning") or msg.get("reasoning_content") or ""
+            text = msg.get("content") or msg.get("reasoning") or msg.get("reasoning_content") or ""
+            if not text.strip():
+                logger.warning("Kimi returned empty text. Full message: %s", msg)
+            return text
 
     async def _chat_anthropic(self, messages: list[dict], system_prompt: str, max_tokens: int) -> str:
         """Chat via Anthropic's native Messages API (Claude)."""

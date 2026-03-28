@@ -25,6 +25,12 @@ async def chat_handler(websocket: WebSocket, db: AsyncSession):
             conversation.append({"role": "user", "content": user_msg})
 
             reply = await engine.chat(conversation, SYSTEM_PROMPT)
+            if not reply or not reply.strip():
+                reply = (
+                    "Thanks for reaching out! I can help you with heating oil delivery, "
+                    "HVAC repair, AC service, and installations across Central PA. "
+                    "What do you need help with today?"
+                )
             conversation.append({"role": "assistant", "content": reply})
 
             # Strip the completion marker before sending to user
