@@ -94,7 +94,7 @@ function chatbot() {
                 null, // handled in processGuidedInput
                 // Step 2: Zip code
                 {
-                    msg: "Thanks for those details. What is your zip code so we can find a contractor near you?",
+                    msg: "Thanks for those details. What is your zip code so we can schedule service in your area?",
                     replies: []
                 },
                 // Step 3: Name & phone
@@ -114,7 +114,7 @@ function chatbot() {
                 },
                 // Step 5: Scheduling
                 {
-                    msg: "When would you like the contractor to come out?",
+                    msg: "When would you like us to come out?",
                     replies: [
                         { label: 'As soon as possible', value: 'asap' },
                         { label: 'Tomorrow', value: 'tomorrow' },
@@ -250,7 +250,7 @@ function chatbot() {
                 `Service: ${serviceLabels[this.leadData.service_type] || this.leadData.service_type}` +
                 `${diagnosis}\n` +
                 `Timing: ${timeLabels[this.leadData.preferred_time] || this.leadData.preferred_time}\n\n` +
-                `A qualified contractor will reach out to you shortly to confirm the appointment. You'll also get a text confirmation!`;
+                `Our team will reach out to you shortly to confirm the appointment. You'll also get a text confirmation!`;
 
             this.addBotMessage(summary);
             this.quickReplies = [];
@@ -305,12 +305,12 @@ function chatbot() {
                     this.leadData.symptoms = value;
                     // Give a brief assessment
                     const assessments = {
-                        'System is not turning on': "That could be a thermostat, ignitor, or power issue. A technician will diagnose it on-site.",
-                        'System runs but does not heat': "This often points to a faulty ignitor, gas valve, or heat exchanger issue. A tech can pinpoint it.",
+                        'System is not turning on': "That could be a thermostat, ignitor, or power issue. Our technician will diagnose it on-site.",
+                        'System runs but does not heat': "This often points to a faulty ignitor, gas valve, or heat exchanger issue. Our tech can pinpoint it.",
                         'System is making unusual noises': "Unusual sounds can indicate a blower motor, bearing, or loose component issue. Good to get it checked.",
                         'System is short cycling': "Short cycling is often caused by a dirty filter, thermostat issue, or overheating safety switch.",
-                        'AC running but not cooling': "This could be low refrigerant, a compressor issue, or a dirty coil. A technician can check it.",
-                        'AC blowing warm air': "Usually a refrigerant or compressor issue. A tech will check the charge and components.",
+                        'AC running but not cooling': "This could be low refrigerant, a compressor issue, or a dirty coil. Our technician can check it.",
+                        'AC blowing warm air': "Usually a refrigerant or compressor issue. Our tech will check the charge and components.",
                         'Tank is running low or almost empty': "We'll get a delivery scheduled for you right away.",
                         'Tank is empty, no heat': "Let's get an emergency delivery out to you as quickly as possible.",
                     };
