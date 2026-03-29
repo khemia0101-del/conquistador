@@ -37,6 +37,9 @@ class ContractorRegister(BaseModel):
     service_zips: list[str]
     max_daily_leads: int = 5
     telegram_chat_id: str | None = None
+    available_days: list[str] | None = None  # e.g. ["mon","tue","wed","thu","fri"]
+    available_start: str | None = None       # e.g. "08:00"
+    available_end: str | None = None         # e.g. "18:00"
 
 
 @router.post("/api/contractors/register")
@@ -59,6 +62,9 @@ async def register_contractor(data: ContractorRegister, db: AsyncSession = Depen
         service_zips=data.service_zips,
         max_daily_leads=data.max_daily_leads,
         telegram_chat_id=data.telegram_chat_id,
+        available_days=data.available_days or [],
+        available_start=data.available_start,
+        available_end=data.available_end,
         is_active=False,  # requires admin approval
     )
     db.add(contractor)
@@ -236,8 +242,9 @@ async def submit_quote(
     auth: dict = Depends(get_current_contractor),
     db: AsyncSession = Depends(get_db),
 ):
-    """Contractor submits their quote. System adds 15-20% markup for the customer price."""
+    """Contractor submits their quote. Dynamic markup based on urgency + season."""
     from decimal import Decimal
+    from conquistador.routing.pricing import calculate_customer_price
 
     contractor_id = auth["contractor_id"]
     stmt = select(LeadAssignment).where(
@@ -252,15 +259,22 @@ async def submit_quote(
     if not assignment:
         raise HTTPException(status_code=404, detail="Assignment not found")
 
-    quote = Decimal(str(data.quote_amount))
-    markup = Decimal("0.20")  # 20% default markup
-    customer_price = (quote * (1 + markup)).quantize(Decimal("0.01"))
+    # Get the lead to determine urgency and service type for dynamic pricing
+    lead_stmt = select(Lead).where(Lead.id == lead_id)
+    lead_result = await db.execute(lead_stmt)
+    lead = lead_result.scalar_one_or_none()
 
+    quote = Decimal(str(data.quote_amount))
+
+    # Dynamic pricing for primary quote
+    _, markup_pct, customer_price = calculate_customer_price(
+        quote, lead.urgency, lead.service_type, is_backup=False
+    )
     assignment.contractor_quote = quote
-    assignment.markup_pct = markup * 100
+    assignment.markup_pct = markup_pct
     assignment.customer_price = customer_price
 
-    # Also update backup assignments for this lead with 15% higher pricing
+    # Update backup assignments with 15% higher base + same dynamic markup
     backup_stmt = select(LeadAssignment).where(
         and_(
             LeadAssignment.lead_id == lead_id,
@@ -271,19 +285,19 @@ async def submit_quote(
     backup_result = await db.execute(backup_stmt)
     backups = list(backup_result.scalars().all())
 
-    backup_markup = Decimal("0.15")
     for backup in backups:
-        # Backup quote is 15% higher than primary contractor's quote
-        backup_quote = (quote * (1 + backup_markup)).quantize(Decimal("0.01"))
-        backup_customer_price = (backup_quote * (1 + markup)).quantize(Decimal("0.01"))
+        backup_quote, backup_markup_pct, backup_customer_price = calculate_customer_price(
+            quote, lead.urgency, lead.service_type, is_backup=True
+        )
         backup.contractor_quote = backup_quote
-        backup.markup_pct = markup * 100
+        backup.markup_pct = backup_markup_pct
         backup.customer_price = backup_customer_price
 
     await db.commit()
     return {
         "status": "quote_submitted",
         "contractor_quote": float(quote),
+        "markup_pct": float(markup_pct),
         "customer_price": float(customer_price),
     }
 
@@ -378,6 +392,10 @@ class ProfileUpdate(BaseModel):
     service_zips: list[str] | None = None
     max_daily_leads: int | None = None
     telegram_chat_id: str | None = None
+    available_days: list[str] | None = None
+    available_start: str | None = None
+    available_end: str | None = None
+    unavailable_until: str | None = None  # ISO datetime string
 
 
 @router.put("/api/contractor/profile")

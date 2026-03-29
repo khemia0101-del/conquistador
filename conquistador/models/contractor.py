@@ -28,3 +28,12 @@ class Contractor(Base):
     is_active = Column(Boolean, default=False)
     password_hash = Column(String(255))
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Availability windows — days/hours the contractor works
+    # available_days: e.g. ["mon","tue","wed","thu","fri"] (empty = all days)
+    available_days = Column(ARRAY(String), default=list)
+    # available_start/end: 24h format, e.g. "08:00" / "18:00" (null = anytime)
+    available_start = Column(String(5))   # e.g. "08:00"
+    available_end = Column(String(5))     # e.g. "18:00"
+    # Temporary unavailability (vacation, booked out, etc.)
+    unavailable_until = Column(DateTime)  # null = currently available

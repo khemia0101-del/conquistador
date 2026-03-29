@@ -9,6 +9,8 @@ from conquistador.models.contractor import Contractor
 from conquistador.models.lead import Lead
 from conquistador.models.outreach import OutreachLog
 from conquistador.comms.contractor_notify import notify_contractor
+from conquistador.comms.telegram_bot import send_admin_alert
+from conquistador.comms.customer_notify import notify_customer_cascading
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +40,15 @@ async def cascade_to_next(lead_id: int, db: AsyncSession) -> bool:
         if lead:
             lead.status = "unmatched"
             await db.commit()
+            # Alert admin — all contractors exhausted
+            await send_admin_alert(
+                f"<b>ALL CONTRACTORS EXHAUSTED</b>\n\n"
+                f"Lead #{lead.id} — {lead.service_type}\n"
+                f"Area: {lead.zip_code}\n"
+                f"Customer: {lead.name or 'Unknown'} ({lead.phone})\n"
+                f"Urgency: {lead.urgency}\n\n"
+                f"Every contractor declined or timed out. Manual action needed."
+            )
         return False
 
     # Get contractor
@@ -50,6 +61,9 @@ async def cascade_to_next(lead_id: int, db: AsyncSession) -> bool:
     lead = lead_result.scalar_one_or_none()
 
     if contractor and lead:
+        # Let the customer know we're finding the next tech
+        await notify_customer_cascading(lead)
+
         channel = await notify_contractor(contractor, lead)
         outreach = OutreachLog(
             lead_id=lead_id,

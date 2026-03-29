@@ -324,7 +324,7 @@ function chatbot() {
 
                 case 2: // Zip code
                     this.leadData.zip_code = value.trim();
-                    // Basic zip validation
+                    // Check if in primary service area
                     const validZips = [
                         '17601','17602','17603','17604','17605','17606',
                         '17543','17545','17554','17557','17560','17572','17576','17584',
@@ -336,8 +336,7 @@ function chatbot() {
                         '19607','19608','19609','19610','19611'
                     ];
                     if (!validZips.includes(this.leadData.zip_code)) {
-                        this.addBotMessage("I'm sorry, we don't currently serve that area. You can call us at (717) 397-9800 and we may be able to help.");
-                        return;
+                        this.addBotMessage("That's a bit outside our primary coverage area, but we may still be able to help! Let me get your info and our team will follow up.");
                     }
                     this.step = 3;
                     this.showGuidedStep();

@@ -9,8 +9,10 @@ from sqlalchemy import select, update, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from conquistador.models.contractor import Contractor
 from conquistador.models.assignment import LeadAssignment
+from conquistador.models.lead import Lead
 from conquistador.routing.cascade import cascade_to_next
 from conquistador.comms.telegram_bot import send_admin_alert
+from conquistador.comms.customer_notify import notify_customer_accepted
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +53,18 @@ async def handle_lead_acceptance(assignment_id: int, db: AsyncSession):
     await db.execute(decline_stmt)
     await db.commit()
 
+    # Notify the customer their technician is confirmed
+    lead_stmt = select(Lead).where(Lead.id == assignment.lead_id)
+    lead_result = await db.execute(lead_stmt)
+    lead = lead_result.scalar_one_or_none()
+    if lead:
+        await notify_customer_accepted(lead)
+
+    # Update contractor metrics
+    from conquistador.quality.scoring import update_contractor_acceptance_rate, update_contractor_response_time
+    await update_contractor_acceptance_rate(assignment.contractor_id, db)
+    await update_contractor_response_time(assignment.contractor_id, db)
+
     logger.info("Lead %d accepted by contractor %d", assignment.lead_id, assignment.contractor_id)
 
 
@@ -66,6 +80,10 @@ async def handle_lead_decline(assignment_id: int, db: AsyncSession):
     assignment.status = "declined"
     assignment.responded_at = datetime.utcnow()
     await db.commit()
+
+    # Update contractor acceptance rate
+    from conquistador.quality.scoring import update_contractor_acceptance_rate
+    await update_contractor_acceptance_rate(assignment.contractor_id, db)
 
     # Cascade to next contractor
     await cascade_to_next(assignment.lead_id, db)

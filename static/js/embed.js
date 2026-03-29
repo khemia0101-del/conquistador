@@ -309,8 +309,7 @@
       case 2:
         leadData.zip_code = value.trim();
         if (VALID_ZIPS.indexOf(leadData.zip_code) === -1) {
-          addMsg('bot', "I'm sorry, we don't currently serve that area. Call us at (717) 397-9800.");
-          return;
+          addMsg('bot', "That's a bit outside our primary area, but we may still be able to help! Let me get your info.");
         }
         step = 3; showStep(); break;
       case 3:

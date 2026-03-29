@@ -72,8 +72,11 @@ async def process_survey_submission(
     db.add(review)
     await db.commit()
 
-    # Update contractor quality score
+    # Update contractor quality score and check thresholds
     await update_contractor_quality_score(contractor_id, db)
+
+    from conquistador.quality.scoring import check_quality_and_alert
+    await check_quality_and_alert(contractor_id, db)
 
     logger.info("Survey processed for lead %d, contractor %d, overall: %s",
                 lead_id, contractor_id, overall)
